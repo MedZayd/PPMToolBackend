@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/project")
+@RequestMapping("/projects")
 public class ProjectController {
 
     private ProjectService projectService;
@@ -40,5 +40,10 @@ public class ProjectController {
     public ResponseEntity<Project> findProjectByIdentifier(@PathVariable String identifier) {
         Project project = projectService.findByIdentifier(identifier);
         return ResponseEntity.ok().body(project);
+    }
+
+    @GetMapping
+    public ResponseEntity<Iterable<Project>> fetchAllProjects() {
+        return ResponseEntity.ok().body(projectService.fetchAllProjects());
     }
 }

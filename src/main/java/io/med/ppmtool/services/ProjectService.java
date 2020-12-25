@@ -6,6 +6,8 @@ import io.med.ppmtool.repositories.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProjectService {
 
@@ -31,5 +33,9 @@ public class ProjectService {
             throw new ProjectIdentifierException("Project Identifier '" + identifier.toUpperCase()+"' does not exist");
         }
         return project;
+    }
+
+    public Iterable<Project> fetchAllProjects() {
+        return projectRepository.findAll();
     }
 }
