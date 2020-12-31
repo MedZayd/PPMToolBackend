@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Map;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/projects")
 public class ProjectController {
@@ -43,8 +44,10 @@ public class ProjectController {
     }
 
     @GetMapping
-    public ResponseEntity<Iterable<Project>> fetchAllProjects() {
-        return ResponseEntity.ok().body(projectService.fetchAllProjects());
+    public ResponseEntity<Iterable<Project>> fetchAllProjects(
+            @RequestParam(name = "keyword", required = false) String keyword
+    ) {
+        return ResponseEntity.ok().body(projectService.fetchAllProjects(keyword));
     }
 
     @DeleteMapping("/{identifier}")

@@ -6,5 +6,5 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class ProjectIdentifierExceptionResponse {
-    private String projectIdentifier;
+    private String identifier;
 }

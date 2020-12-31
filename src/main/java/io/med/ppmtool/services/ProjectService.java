@@ -4,9 +4,11 @@ import io.med.ppmtool.domain.Project;
 import io.med.ppmtool.exceptions.ProjectIdentifierException;
 import io.med.ppmtool.repositories.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProjectService {
@@ -20,10 +22,19 @@ public class ProjectService {
 
     public Project saveOrUpdateProject(Project project) {
         try {
-            project.setIdentifier(project.getIdentifier().toUpperCase());
+            if (project.getId() != null && project.getIdentifier() != null) {
+                Optional<Project> existing = projectRepository.findById(project.getId());
+                if (!existing.isPresent()) {
+                    throw new ProjectIdentifierException("Project id '" + project.getId() +"' does not exist");
+                }
+                project.setIdentifier(existing.get().getIdentifier());
+            } else {
+                assert project.getIdentifier() != null;
+                project.setIdentifier(project.getIdentifier().toUpperCase());
+            }
             return projectRepository.save(project);
         } catch (Exception e) {
-            throw new ProjectIdentifierException("Project Identifier '" + project.getIdentifier().toUpperCase()+"' already exist");
+            throw new ProjectIdentifierException("Project Identifier already exist");
         }
     }
 
@@ -35,8 +46,11 @@ public class ProjectService {
         return project;
     }
 
-    public Iterable<Project> fetchAllProjects() {
-        return projectRepository.findAll();
+    public Iterable<Project> fetchAllProjects(String keyword) {
+        if (keyword != null) {
+            return projectRepository.findByKeyword(keyword.toUpperCase());
+        }
+        return projectRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
     }
 
     public void deleteProjectByIdentifier(String identifier) {
