@@ -1,6 +1,5 @@
 package io.med.ppmtool.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,11 +17,9 @@ import java.util.Date;
 @EntityListeners(AuditingEntityListener.class)
 public class Auditable {
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
     @CreatedDate
     private Date createdAt;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
     @LastModifiedDate
     private Date updatedAt;
 }

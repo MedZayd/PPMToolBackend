@@ -1,6 +1,7 @@
 package io.med.ppmtool.web;
 
 import io.med.ppmtool.domain.Project;
+import io.med.ppmtool.dto.ProjectDto;
 import io.med.ppmtool.services.ProjectService;
 import io.med.ppmtool.services.ValidationErrors;
 import org.apache.coyote.Response;
@@ -29,12 +30,12 @@ public class ProjectController {
 
     @PostMapping
     public ResponseEntity<?> createNewProject(
-            @Valid @RequestBody Project project,
+            @Valid @RequestBody ProjectDto projectDto,
             BindingResult bindingResult
     ) {
         ResponseEntity<Map<String, String>> errorMap = validationErrors.getValidationErrors(bindingResult);
         if (errorMap != null) return errorMap;
-        return ResponseEntity.status(HttpStatus.CREATED).body(projectService.saveOrUpdateProject(project));
+        return ResponseEntity.status(HttpStatus.CREATED).body(projectService.saveOrUpdateProject(projectDto));
     }
 
     @GetMapping("/{identifier}")
